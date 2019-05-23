@@ -1,0 +1,75 @@
+DEBUG output created by Wget 1.12 on linux-gnu.
+
+--2018-11-20 16:30:56--  http://192.168.202.30:8080/thredds/fileServer/collection1/singleDataset.nc
+Connecting to 192.168.202.30:8080... connected.
+Created socket 3.
+Releasing 0x0000000000e74a10 (new refcount 0).
+Deleting unused 0x0000000000e74a10.
+
+---request begin---
+GET /thredds/fileServer/collection1/singleDataset.nc HTTP/1.0
+User-Agent: Wget/1.12 (linux-gnu)
+Accept: */*
+Host: 192.168.202.30:8080
+Connection: Keep-Alive
+
+---request end---
+HTTP request sent, awaiting response... 
+---response begin---
+HTTP/1.1 200 OK
+Server: Apache-Coyote/1.1
+Last-Modified: Thu, 15 Nov 2018 16:08:25 GMT
+Accept-Ranges: bytes
+Content-Type: application/x-netcdf
+Content-Length: 1073741824
+Date: Tue, 20 Nov 2018 15:30:56 GMT
+Connection: keep-alive
+
+---response end---
+200 OK
+Registered socket 3 for persistent reuse.
+Length: 1073741824 (1,0G) [application/x-netcdf]
+Saving to: “singleDataset.nc.4”
+
+56% [================================>                           ] 605.790.208  109M/s   in 5,3s    
+
+2018-11-20 16:31:06 (109 MB/s) - Connection closed at byte 605790208. Retrying.
+
+--2018-11-20 16:31:07--  (try: 2)  http://192.168.202.30:8080/thredds/fileServer/collection1/singleDataset.nc
+Disabling further reuse of socket 3.
+Closed fd 3
+Connecting to 192.168.202.30:8080... connected.
+Created socket 3.
+Releasing 0x0000000000e77a00 (new refcount 0).
+Deleting unused 0x0000000000e77a00.
+
+---request begin---
+GET /thredds/fileServer/collection1/singleDataset.nc HTTP/1.0
+Range: bytes=605790208-
+User-Agent: Wget/1.12 (linux-gnu)
+Accept: */*
+Host: 192.168.202.30:8080
+Connection: Keep-Alive
+
+---request end---
+HTTP request sent, awaiting response... 
+---response begin---
+HTTP/1.1 206 Partial Content
+Server: Apache-Coyote/1.1
+Last-Modified: Thu, 15 Nov 2018 17:00:03 GMT
+Accept-Ranges: bytes
+Content-Range: bytes 605790208-1073741823/1073741824
+Content-Type: application/x-netcdf
+Content-Length: 467951616
+Date: Tue, 20 Nov 2018 15:31:07 GMT
+Connection: keep-alive
+
+---response end---
+206 Partial Content
+Registered socket 3 for persistent reuse.
+Length: 1073741824 (1,0G), 467951616 (446M) remaining [application/x-netcdf]
+Saving to: “singleDataset.nc.4”
+
+100%[++++++++++++++++++++++++++++++++=========================>] 1.073.741.824  109M/s   in 4,1s    
+
+2018-11-20 16:31:16 (109 MB/s) - “singleDataset.nc.4” saved [1073741824/1073741824]

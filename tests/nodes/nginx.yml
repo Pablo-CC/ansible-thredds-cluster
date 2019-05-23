@@ -1,0 +1,64 @@
+- name: Gather facts on all hosts
+  hosts: all
+  gather_facts: True
+
+- name: Configure load balancer
+  hosts: gateways
+  roles:
+    - role: source
+      dependencies: [nginx]
+    - role: nginx
+    - role: gateway-nginx
+
+- name: Configure servers
+  hosts: tds
+  vars:
+    # required interface
+    jdk_root: "/tmp/jdk"
+    tomcat_home: "/tmp/tomcat"
+    tomcat_base: "/tmp/instances"
+    venv_home: "/tmp/virtualenv"
+  roles:
+    - role: source
+      dependencies: [jdk, tomcat, supervisor]
+    - role: tds
+      tags: [tds]
+    - role: tds-nginx
+    - role: tomcat-cluster
+      instances: "{{ tds }}"
+    - role: supervisor-tds
+  tasks:
+    - name: Create symlink to singleDataset.nc
+      file:
+        src: "{{ ansible_env.HOME }}/singleDataset.nc"
+        dest: "{{ tomcat_home }}/content/thredds/public/singleDataset.nc"
+        state: link
+
+    - include_tasks: ../../utils/test-authentication.yml
+      vars:
+        instances: "{{ tds }}"
+
+    - name: start tds instances
+      supervisorctl:
+        name: "{{ item.name }}"
+        state: started
+        username: "{{ supervisor_user | default(omit) }}"
+        password: "{{ supervisor_password | default(omit) }}"
+        supervisorctl_path: "{{ supervisor_bin }}/supervisorctl"
+      with_items: "{{ tds }}"
+
+    - name: restart tds instances
+      supervisorctl:
+        name: "{{ item.name }}"
+        state: restarted
+        username: "{{ supervisor_user | default(omit) }}"
+        password: "{{ supervisor_password | default(omit) }}"
+        supervisorctl_path: "{{ supervisor_bin }}/supervisorctl"
+      with_items: "{{ tds }}"
+      tags: [never, restart, update_catalogs]
+
+- name: Start Nginx
+  hosts: gateways
+  tasks:
+
+    - command: "{{ nginx_bin }} -c {{ nginx_conf }}"

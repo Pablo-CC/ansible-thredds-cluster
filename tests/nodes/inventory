@@ -1,0 +1,10 @@
+gateway ansible_ssh_host=wn020
+server1 ansible_ssh_host=wn021
+server2 ansible_ssh_host=wn022
+
+[gateways]
+gateway
+
+[tds]
+server1
+server2

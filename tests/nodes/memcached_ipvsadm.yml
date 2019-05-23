@@ -1,0 +1,88 @@
+- name: Gather facts on all hosts
+  hosts: all
+  gather_facts: True
+
+- name: Configure load balancer
+  become: True
+  hosts: gateways
+  vars:
+    vip: "{{ ansible_eth0.ipv4.address }}"
+  roles:
+    - role: yum
+      dependencies: [ipvsadm]
+    - role: ipvsadm
+  tasks:
+    - name: Disable Reverse Path Filtering
+      sysctl:
+        name: "{{ item }}"
+        value: 0
+      with_items:
+        - net.ipv4.conf.all.rp_filter
+        - "net.ipv4.conf.{{ ansible_eth0.device }}.rp_filter"
+
+- name: Configure servers
+  hosts: tds
+  vars:
+    ansible_become_pass: ansible
+    # required interface
+    jdk_root: "/tmp/jdk"
+    tomcat_home: "/tmp/tomcat"
+    tomcat_base: "/tmp/instances"
+    venv_home: "/tmp/virtualenv"
+  roles:
+    - role: source
+      dependencies: [jdk, tomcat, supervisor]
+    - role: yum
+      dependencies: [memcached]
+    - role: tds
+      tags: [tds]
+    - role: tds-ipvsadm
+      become: True
+    - role: tomcat-memcached
+      instances: "{{ tds }}"
+    - role: supervisor-tds
+  tasks:
+    - name: Create symlink to singleDataset.nc
+      file:
+        src: "{{ ansible_env.HOME }}/singleDataset.nc"
+        dest: "{{ tomcat_home }}/content/thredds/public/singleDataset.nc"
+        state: link
+
+    - include_tasks: ../../utils/test-authentication.yml
+      vars:
+        instances: "{{ tds }}"
+
+    - name: Start memcached
+      command: memcached -d -u ansible
+
+    - name: start tds instances
+      supervisorctl:
+        name: "{{ item.name }}"
+        state: started
+        username: "{{ supervisor_user | default(omit) }}"
+        password: "{{ supervisor_password | default(omit) }}"
+        supervisorctl_path: "{{ supervisor_bin }}/supervisorctl"
+      with_items: "{{ tds }}"
+
+    - name: restart tds instances
+      supervisorctl:
+        name: "{{ item.name }}"
+        state: restarted
+        username: "{{ supervisor_user | default(omit) }}"
+        password: "{{ supervisor_password | default(omit) }}"
+        supervisorctl_path: "{{ supervisor_bin }}/supervisorctl"
+      with_items: "{{ tds }}"
+      tags: [never, restart, update_catalogs]
+
+
+- name: Start ipvsadm
+  hosts: gateways
+  become: True
+  tasks:
+
+    - service:
+        name: ipvsadm.service
+        state: started
+        enabled: True
+          
+    - shell: "ipvsadm-restore < {{ ipvs_rules }}"

@@ -1,0 +1,23 @@
+- name: Deploy memcached session manager
+  gather_facts: True
+  hosts: tds
+  vars:
+    dont_follow: True
+    venv_home: "/tmp/virtualenv"
+    tomcat_home: "/tmp/tomcat"
+    tomcat_base: "/tmp/instances"
+    tomcat_major_version: 8
+  roles:
+    - role: tomcat-memcached
+      instances: "{{ tds }}"
+
+  tasks:
+    - name: Restart TDS instances
+      supervisorctl:
+        name: "{{ item.name }}"
+        state: restarted
+        username: "{{ supervisor_user | default(omit) }}"
+        password: "{{ supervisor_password | default(omit) }}"
+        supervisorctl_path: "{{ venv_home }}/bin/supervisorctl"
+      with_items: "{{ tds }}"
+
