@@ -1,0 +1,54 @@
+- name: Play to provision nodes to deploy Kubernetes with RKE
+  hosts: all
+  become: True
+  gather_facts: True
+  vars:
+    username: pablo
+    groupname: pablo
+    docker_ce_url: "https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-18.09.6-3.el7.x86_64.rpm"
+    docker_ce_cli_url: "https://download.docker.com/linux/centos/7/x86_64/stable/Packages/docker-ce-cli-18.09.6-3.el7.x86_64.rpm"
+    containerd_url: "https://download.docker.com/linux/centos/7/x86_64/stable/Packages/containerd.io-1.2.5-3.1.el7.x86_64.rpm"
+    ssh_public_key: ""
+  tasks:
+    - name: Open TCP ports
+      firewalld:
+        port: "{{ item }}"
+        state: enabled
+        permanent: True
+      with_items:
+        - 1024-65535/tcp
+
+    - name: Install docker
+      yum:
+        name:
+          - "{{ containerd_url }}"
+          - "{{ docker_ce_cli_url }}"
+          - "{{ docker_ce_url }}"
+        state: present
+
+    - name: Install docker-compose
+      yum:
+        name: docker-compose
+        state: present
+
+    - name: Start dockerd
+      systemd:
+        name: docker
+        state: started
+        enabled: True
+
+    - name: Add a principal group for non-root user
+      group:
+        name: "{{ groupname }}"
+
+    - name: Add non-root user to run docker
+      user:
+        name: "{{ username }}"
+        group: "{{ groupname }}"
+        groups: [docker]
+
+    - name: Enable ssh access for non-root user
+      authorized_key:
+        user: "{{ username }}"
+        key: "{{ ssh_public_key }}"
+        state: present
