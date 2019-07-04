@@ -82,26 +82,30 @@ With Rancher you can easily deploy a Kubernetes Cluster in a few steps. By defau
 
 #### Provision
 
-You can use the playbook at [./rke/playbooks/init-nodes.yaml] to provision the node(s) with Ansible. This playbooks installs Docker in the node(s) and creates a non-root user with SSH access able to run docker (the user needs to be in the `docker` group).
-s is all you need to run RKE at your computer and create the Kubernetes cluster.
+* You can use the playbook at [./rke/playbooks/init-nodes.yaml] to provision the node(s) with Ansible. This playbooks installs Docker in the node(s) and creates a non-root user with SSH access able to run docker (the user needs to be in the `docker` group).
+This is all you need to run RKE at your computer and create the Kubernetes cluster.
 
-Download [the RKE binary](https://rancher.com/docs/rke/latest/en/installation/#download-the-rke-binary)
+* Download [the RKE binary](https://rancher.com/docs/rke/latest/en/installation/#download-the-rke-binary)
 
-`mv <rke-binary> rke`
+* `mv <rke-binary> rke`
 
-Complete the configuration with your cluster's info:
+* Complete the configuration with your cluster's info:
 
 `rke config`
 
-`rke up`
+* `rke up`
 
-Now copy the file generated with RKE as your default Kubernetes config file:
+* Now copy the file generated with RKE as your default Kubernetes config file:
 
 `cp kube_config_cluster.yml ~/.kube/config`
 
-Check that you can communicate with you cluster using kubectl:
+* Check that you can communicate with you cluster using kubectl:
 `kubectl cluster-info`
 
 `kubectl get nodes`
 
-
+## References
+* [https://github.com/Unidata/thredds-docker
+* [Horizontal Pod Autoscaler - Kubernetes Docs](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#support-for-cooldown-delay)
+* [HPA Walkthrough - Kubernetes Docs](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/)
+* [RKE Documentation](https://rancher.com/docs/rke/latest/en/)
