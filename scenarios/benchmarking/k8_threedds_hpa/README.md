@@ -2,6 +2,9 @@
 In this scenario a THREDDS Cluster is deployed in Kubernetes as a single Deployment with 2 replicas (2 Pods), with an Horizontal Pod Autoscaler configured
 to automatically create new replicas in order to keep the average CPU load under 50%, up to 6 replicas.
 
+## TL;DR
+`kubectl apply -f .`
+
 ## thredds-deployment.yaml
 With the Deployment object you define the number of replicas and the port(s) the containers will be listening on. It uses the official [Unidata Docker container](https://hub.docker.com/r/unidata/thredds-docker/dockerfile) as the image for the containers.
 
