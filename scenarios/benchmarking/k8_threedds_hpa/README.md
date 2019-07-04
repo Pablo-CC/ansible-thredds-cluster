@@ -89,20 +89,13 @@ This is all you need to run RKE at your computer and create the Kubernetes clust
 
 * `mv <rke-binary> rke`
 
-* Complete the configuration with your cluster's info:
-
-`rke config`
+* Complete the configuration with your cluster's info: `rke config`
 
 * `rke up`
 
-* Now copy the file generated with RKE as your default Kubernetes config file:
+* Now copy the file generated with RKE as your default Kubernetes config file: `cp kube_config_cluster.yml ~/.kube/config`
 
-`cp kube_config_cluster.yml ~/.kube/config`
-
-* Check that you can communicate with you cluster using kubectl:
-`kubectl cluster-info`
-
-`kubectl get nodes`
+* Check that you can communicate with you cluster using kubectl: `kubectl cluster-info`
 
 ## References
 * [https://github.com/Unidata/thredds-docker
