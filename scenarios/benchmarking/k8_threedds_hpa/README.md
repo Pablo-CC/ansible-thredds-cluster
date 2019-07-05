@@ -83,7 +83,9 @@ With Rancher you can easily deploy a Kubernetes Cluster in a few steps. By defau
 #### Provision
 
 * You can use the playbook at [./rke/playbooks/init-nodes.yaml] to provision the node(s) with Ansible. This playbooks installs Docker in the node(s) and creates a non-root user with SSH access able to run docker (the user needs to be in the `docker` group).
-This is all you need to run RKE at your computer and create the Kubernetes cluster.
+This is all you need to run RKE at your computer and create the Kubernetes cluster. 
+
+* There is a more complete Ansible role at [cedadev/rke-ansible](https://github.com/cedadev/rke-ansible)
 
 * Download [the RKE binary](https://rancher.com/docs/rke/latest/en/installation/#download-the-rke-binary)
 
@@ -93,9 +95,12 @@ This is all you need to run RKE at your computer and create the Kubernetes clust
 
 * `rke up`
 
-* Now copy the file generated with RKE as your default Kubernetes config file: `cp kube_config_cluster.yml ~/.kube/config`
+* Copy the file generated with RKE as your default K8s config file: `cp kube_config_cluster.yml ~/.kube/config`
 
 * Check that you can communicate with you cluster using kubectl: `kubectl cluster-info`
+
+
+You can uninstall the cluster with `rke remove` 
 
 ## References
 * [https://github.com/Unidata/thredds-docker
