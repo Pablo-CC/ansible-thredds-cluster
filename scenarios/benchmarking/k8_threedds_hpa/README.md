@@ -97,12 +97,12 @@ This is all you need to run RKE at your computer and create the Kubernetes clust
 
 * Check that you can communicate with you cluster using kubectl: `kubectl cluster-info`
 
-* There is a more complete Ansible role to do all this at [cedadev/rke-ansible](https://github.com/cedadev/rke-ansible)
+* __There is a more complete Ansible role to do all this at [cedadev/rke-ansible](https://github.com/cedadev/rke-ansible)__
 
 You can uninstall the cluster with `rke remove` 
 
 ## References
-* [https://github.com/Unidata/thredds-docker]
+* https://github.com/Unidata/thredds-docker
 * [Horizontal Pod Autoscaler - Kubernetes Docs](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#support-for-cooldown-delay)
 * [HPA Walkthrough - Kubernetes Docs](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale-walkthrough/)
 * [RKE Documentation](https://rancher.com/docs/rke/latest/en/)
