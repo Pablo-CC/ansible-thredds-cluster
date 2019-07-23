@@ -7,18 +7,19 @@ entry point for requests. The Ingress Controller listens on the node's IP and 80
 
 
 ## TL;DR
-* helm install --name=nginx-ingress-controller stable/nginx-ingress -f ingress-controller-values.yml
-* kubectl create namespace thredds
-* kubectl apply -f thredds\_deployment.yml
-* kubectl apply -f thredds\_service.yml
-* kubectl apply -f thredds\_ingress.yml
-* kubectl apply -f horizPodAutoScaler.yml
-
+```bash
+helm install --name=nginx-ingress-controller stable/nginx-ingress -f ingress-controller-values.yml
+kubectl create namespace thredds
+kubectl apply -f thredds_deployment.yml
+kubectl apply -f thredds_service.yml
+kubectl apply -f thredds_ingress.yml
+kubectl apply -f horizPodAutoScaler.yml
+```
 ## thredds-deployment.yaml
 With the Deployment object you define the number of replicas and the port(s) the containers will be listening on. It uses the official [Unidata Docker container](https://hub.docker.com/r/unidata/thredds-docker/dockerfile) as the image for the containers.
 There are two deployments in this scenarios, one for each THREDDS cluster defined (`data` and `catalog`).
 
-```
+```yaml
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -79,7 +80,7 @@ spec:
 
 There are two services configured, that serve the Pods of each cluster. As there is an Ingress Controller listening for outside requests, these services just need to be `ClusterIP`, accessible only inside the Kubernetes Cluster.
 
-```
+```yaml
 apiVersion: v1
 kind: Service
 metadata:
@@ -113,7 +114,7 @@ spec:
 ## thredds\_ingress.yml
 The Ingress element acts as the backend of the Ingress Controller. In this case two ingresses are defined, so the Ingress controller redirects to the corresponding service (and therefore, to the corresponding Pod) discriminating the path of the URI.
 
-```
+```yaml
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
@@ -169,7 +170,7 @@ spec:
 ## horizPodAutoscaler.yml
 HPA checks for configured metric values at a default 30 second interval and tries to increase the number of replicas inside the deployment if the scecified threshold is met (with 10% tolerance). In this case the two THREDDS clusters are treated separately for monitoring and scaling.
 
-```
+```yaml
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
 metadata:
