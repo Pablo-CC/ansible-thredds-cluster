@@ -1,0 +1,28 @@
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: thredds-data-hpa
+  namespace: thredds
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: thredds-data
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 50
+
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: thredds-catalog-hpa
+  namespace: thredds
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: thredds-catalog
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 50

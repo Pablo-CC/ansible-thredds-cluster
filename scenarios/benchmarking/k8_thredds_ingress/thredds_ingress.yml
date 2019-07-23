@@ -1,0 +1,50 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: thredds
+    cluster: data
+    component: ingress
+  name: thredds-data
+  namespace: thredds
+spec:
+  rules:
+  - host: thredds.<Access IP>.nip.io
+    http:
+      paths:
+      - backend:
+          serviceName: thredds-catalog
+          servicePort: 8080
+        path: /thredds/catalog
+
+---
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  labels:
+    app: thredds
+    cluster: data
+    component: ingress
+  name: thredds-data
+  namespace: thredds
+spec:
+  rules:
+  - host: thredds.<Access IP>.nip.io
+    http:
+      paths:
+      - backend:
+          serviceName: thredds-data
+          servicePort: 8080
+        path: /thredds/dodsC
+      - backend:
+          serviceName: thredds-data
+          servicePort: 8080
+        path: /thredds/fileServer
+      - backend:
+          serviceName: thredds-data
+          servicePort: 8080
+        path: /thredds/dap4
+      - backend:
+          serviceName: thredds-data
+          servicePort: 8080
+        path: /thredds/ncss
