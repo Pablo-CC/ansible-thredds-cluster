@@ -7,14 +7,12 @@ entry point for requests. The Ingress Controller listens on the node's IP and 80
 
 
 ## TL;DR
-```
-helm install --name=nginx-ingress-controller stable/nginx-ingress -f ingress-controller-values.yml
-kubectl create namespace thredds
-kubectl apply -f thredds\_deployment.yml
-kubectl apply -f thredds\_service.yml
-kubectl apply -f thredds\_ingress.yml
-kubectl apply -f horizPodAutoScaler.yml
-```
+* helm install --name=nginx-ingress-controller stable/nginx-ingress -f ingress-controller-values.yml
+* kubectl create namespace thredds
+* kubectl apply -f thredds\_deployment.yml
+* kubectl apply -f thredds\_service.yml
+* kubectl apply -f thredds\_ingress.yml
+* kubectl apply -f horizPodAutoScaler.yml
 
 ## thredds-deployment.yaml
 With the Deployment object you define the number of replicas and the port(s) the containers will be listening on. It uses the official [Unidata Docker container](https://hub.docker.com/r/unidata/thredds-docker/dockerfile) as the image for the containers.
@@ -207,3 +205,4 @@ spec:
 * [Ingress - Kubernetes Docs](https://kubernetes.io/docs/concepts/services-networking/ingress/)
 * [Ingress Controllers](https://kubernetes.io/docs/concepts/services-networking/ingress-controllers/)
 * [Horizontal Pod Autoscaler - Kubernetes Docs](https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/#support-for-cooldown-delay)
+
