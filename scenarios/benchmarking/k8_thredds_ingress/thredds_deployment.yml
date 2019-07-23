@@ -1,0 +1,54 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thredds-catalog
+  namespace: thredds
+spec:
+  selector:
+    matchLabels:
+      app: thredds
+      cluster: catalog
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: thredds
+        cluster: catalog
+    spec:
+      containers:
+        - name: thredds-catalog
+          image: unidata/thredds-docker
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "2Gi"
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: thredds-data
+  namespace: thredds
+spec:
+  selector:
+    matchLabels:
+      app: thredds
+      cluster: data
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: thredds
+        cluster: data
+    spec:
+      containers:
+        - name: thredds-data
+          image: unidata/thredds-docker
+          ports:
+            - containerPort: 8080
+          resources:
+            requests:
+              cpu: "200m"
+              memory: "2Gi"
